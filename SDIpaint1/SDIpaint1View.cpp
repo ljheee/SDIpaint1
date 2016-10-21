@@ -26,6 +26,8 @@ BEGIN_MESSAGE_MAP(CSDIpaint1View, CEditView)
 	ON_COMMAND(ID_FILE_PRINT, &CEditView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CEditView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CEditView::OnFilePrintPreview)
+	ON_COMMAND(ID_SET_COLOR, &CSDIpaint1View::OnSetColor)
+	ON_COMMAND(ID_SET_FONT, &CSDIpaint1View::OnSetFont)
 END_MESSAGE_MAP()
 
 // CSDIpaint1View 构造/析构
@@ -95,3 +97,26 @@ CSDIpaint1Doc* CSDIpaint1View::GetDocument() const // 非调试版本是内联的
 
 
 // CSDIpaint1View 消息处理程序
+
+//设置颜色
+void CSDIpaint1View::OnSetColor()
+{
+	// TODO:  在此添加命令处理程序代码
+	COLORREF color = RGB(0,0,0);//默认颜色
+	CColorDialog cdlg(color, CC_FULLOPEN | CC_RGBINIT); // 设置默认颜色
+	if (cdlg.DoModal() == IDOK)
+		color = cdlg.GetColor();
+
+
+}
+
+//设置字体
+void CSDIpaint1View::OnSetFont()
+{
+	// TODO:  在此添加命令处理程序代码
+	CFontDialog dlg;
+	if (IDOK == dlg.DoModal()){
+
+	}
+
+}

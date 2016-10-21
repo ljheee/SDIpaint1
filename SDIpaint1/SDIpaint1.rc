@@ -134,6 +134,11 @@ BEGIN
         MENUITEM "查找下一个(&I)\tF3",               ID_EDIT_REPEAT
         MENUITEM "替换(&E)\tCtrl+H",              ID_EDIT_REPLACE
     END
+    POPUP "选项(&O)"
+    BEGIN
+        MENUITEM "Color(&C)",                   ID_SET_COLOR
+        MENUITEM "Font(&F)",                    ID_SET_FONT
+    END
     POPUP "视图(&V)"
     BEGIN
         MENUITEM "工具栏(&T)",                     ID_VIEW_TOOLBAR

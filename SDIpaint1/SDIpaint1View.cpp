@@ -28,6 +28,7 @@ BEGIN_MESSAGE_MAP(CSDIpaint1View, CEditView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CEditView::OnFilePrintPreview)
 	ON_COMMAND(ID_SET_COLOR, &CSDIpaint1View::OnSetColor)
 	ON_COMMAND(ID_SET_FONT, &CSDIpaint1View::OnSetFont)
+	ON_WM_CTLCOLOR_REFLECT()
 END_MESSAGE_MAP()
 
 // CSDIpaint1View 构造/析构
@@ -35,6 +36,8 @@ END_MESSAGE_MAP()
 CSDIpaint1View::CSDIpaint1View()
 {
 	// TODO:  在此处添加构造代码
+	m_brBkgnd.CreateSolidBrush(RGB(255, 255, 255));//构造画刷
+	m_font.CreatePointFont(120, _T("宋体"));
 
 }
 
@@ -98,25 +101,59 @@ CSDIpaint1Doc* CSDIpaint1View::GetDocument() const // 非调试版本是内联的
 
 // CSDIpaint1View 消息处理程序
 
-//设置颜色
+
+//点击菜单项---设置颜色
 void CSDIpaint1View::OnSetColor()
 {
 	// TODO:  在此添加命令处理程序代码
 	COLORREF color = RGB(0,0,0);//默认颜色
 	CColorDialog cdlg(color, CC_FULLOPEN | CC_RGBINIT); // 设置默认颜色
 	if (cdlg.DoModal() == IDOK)
-		color = cdlg.GetColor();
+		m_clrText = cdlg.GetColor();	//m_clrText在头文件，是全局变量
 
 
+//	CDC* dc = GetDC();
+//	dc->SelectObject(&color);
+//	dc->SetTextColor(RGB( 255, 0, 0)); //此方法没有实现字色改变
 }
 
-//设置字体
+//点击菜单项---设置字体
 void CSDIpaint1View::OnSetFont()
 {
 	// TODO:  在此添加命令处理程序代码
-	CFontDialog dlg;
-	if (IDOK == dlg.DoModal()){
+	LOGFONT lf;
 
+	CFont *ft = this->GetEditCtrl().GetFont();
+	if (ft == NULL)
+	{
+		ft = new CFont;
+		ft->CreatePointFont(120, _T("隶书"));
+		ft->GetLogFont(&lf);
+		delete ft;
+	}
+	else
+	{
+		ft->GetLogFont(&lf);
 	}
 
+	CFontDialog cf(&lf);
+	if (cf.DoModal() == IDOK)
+	{
+		m_font.DeleteObject();
+		m_font.CreateFontIndirect(&lf);
+		CEditView::SetFont(&m_font);
+	}
+
+}
+
+//实现视图类---- =WM_CTLCOLOR   反射消息
+HBRUSH CSDIpaint1View::CtlColor(CDC* pDC, UINT /*nCtlColor*/)
+{
+	// TODO:  在此更改 DC 的任何特性
+	pDC->SetTextColor(m_clrText);         //   text 
+
+	return   m_brBkgnd;                               
+
+	// TODO:  如果不应调用父级的处理程序，则返回非 null 画笔
+//	return NULL;
 }

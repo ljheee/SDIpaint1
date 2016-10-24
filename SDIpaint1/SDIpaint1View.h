@@ -15,6 +15,10 @@ protected: // 仅从序列化创建
 public:
 	CSDIpaint1Doc* GetDocument() const;
 
+	COLORREF   m_clrText;       //记录文本颜色 
+	CBrush   m_brBkgnd;     //用于绘制背景的刷子 
+
+	CFont m_font;
 // 操作
 public:
 
@@ -42,6 +46,7 @@ protected:
 public:
 	afx_msg void OnSetColor();
 	afx_msg void OnSetFont();
+	afx_msg HBRUSH CtlColor(CDC* /*pDC*/, UINT /*nCtlColor*/);
 };
 
 #ifndef _DEBUG  // SDIpaint1View.cpp 中的调试版本
